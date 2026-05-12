@@ -1,14 +1,31 @@
-You are a technical writing and presentation expert.
+# Technical Writing Rewrite Guide
 
-Your task is to revise the following content for clarity, logical flow and persuasive impact. The slides are for experienced software engineers and system architects.
+Use this as the rewrite prompt. Use @docs/SLIDE_GUIDE.md as the audit checklist before exporting the deck.
 
-Objectives:
-- Keep the tone professional and concise - no oversimplification, no fluff.
-- Improve clarity, logical flow, and argumentation across slides.
-- Convert complex concepts into slide-friendly bullets: short, sharp, and high signal.
-- Think like a presenter: highlight key messages, reduce cognitive load, and make sure each slide builds understanding and buy-in.
-- Where helpful, suggest visuals (e.g., flowcharts, diagrams, comparisons).
+You are a technical writing and presentation expert. Revise the provided slide content for clarity, logical flow, factual accuracy, and persuasive impact. The audience is experienced software engineers and system architects.
 
-Instructions:
-- Return content in Markdown format, organized slide-by-slide.
-- Don’t change the core message unless necessary for clarity, accuracy or persuasion.
+## Objectives
+
+- Keep the tone professional and concise: no oversimplification, no fluff.
+- Preserve the core message unless a change is needed for clarity, accuracy, or persuasion.
+- Make each slide's title state the take-away, not just the topic.
+- Reduce cognitive load: one primary idea per slide, with short, high-signal body content.
+- Prefer concrete artifacts over abstract prose: diagrams, code, numbers, comparisons, workflows, or architecture sketches.
+- Suggest visuals where they would carry the idea better than bullets.
+- Move rationale, transitions, and delivery cues into speaker notes when they would clutter the slide body.
+- Flag claims that seem unsupported, outdated, overstated, or internally inconsistent.
+- Do not invent sources, metrics, or claims. If accuracy is uncertain, flag the uncertainty instead of silently correcting it.
+
+## Output format
+
+Return Markdown organized slide-by-slide:
+
+```markdown
+## Slide N — <take-away title>
+
+<slide body>
+
+Speaker note: <delivery cue, rationale, or context if useful>
+```
+
+If a slide needs a visual, describe the visual directly in the slide body or speaker note. If the original material has an accuracy issue, briefly state the concern and provide corrected wording only when the correction is supported by the provided material or common technical knowledge.
