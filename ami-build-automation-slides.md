@@ -4,7 +4,7 @@
 
 ## Slide 1 — Hand-rolled AMIs drifted — one declarative pipeline now bakes them all
 
-**One pipeline. Two layers. Two clouds. Same template.**
+**Two layers. Two clouds. Same template.**
 
 Problem framing → Architecture → Onboarding → What's next
 
@@ -39,11 +39,11 @@ Speaker note: This is *the* mental model for the rest of the deck — pause here
 ```
 deployment/packer/base/
 ├── base.pkr.hcl
-└── 01-core-setup.sh
-    02-nvidia-driver.sh
-    03-docker-nvidia.sh
-    04-aws-tools.sh
-    05-validate.sh
+├── 01-core-setup.sh
+├── 02-nvidia-driver.sh
+├── 03-docker-nvidia.sh
+├── 04-aws-tools.sh
+└── 05-validate.sh
 ```
 
 Matrix: `{aws, gcp}` × `{nvidia-driver-580, nvidia-driver-580-open}` → **4 jobs**
@@ -57,18 +57,18 @@ Speaker note: When someone asks "where does the GPU driver come from?" the answe
 ```
 deployment/packer/app/
 ├── app.pkr.hcl
-└── 00-stage-samples.sh
-    01-setup-runtime.sh
-    02-gcp-credentials.sh
-    03-docker-pull.sh
-    04-validate.sh
+├── 00-stage-samples.sh
+├── 01-setup-runtime.sh
+├── 02-gcp-credentials.sh
+├── 03-docker-pull.sh
+└── 04-validate.sh
 ```
 
 Sources base via: `source_ami_filter { name = local.base_image_name }` (exact name, not glob)
 
 > No first-boot install step — rollback is just an AMI swap.
 
-Speaker note: `base_image_name` is `"ami-base-ubuntu2204-${var.nvidia_driver_variant}-${var.base_image_version}"` — interpolated local, exact match. Flag `02-gcp-credentials` here so the GCP slide lands smoothly.
+Speaker note: `base_image_name` is `"ami-base-ubuntu2204-${var.nvidia_driver_variant}-${var.base_image_version}"` — interpolated local, exact match. Flag `02-gcp-credentials.sh` here so the GCP slide lands smoothly.
 
 ---
 
@@ -76,30 +76,30 @@ Speaker note: `base_image_name` is `"ami-base-ubuntu2204-${var.nvidia_driver_var
 
 | Concern | AWS | GCP |
 |---|---|---|
-| Auth into ECR | Native OIDC | GCE metadata JWT → STS `assume-role-with-web-identity` → temp creds |
+| Auth into ECR | Native OIDC | metadata JWT → STS → temp creds |
 | Fleet primitive | ASG | MIG |
 | Packer template | shared | shared |
 | Image tags | shared | shared (with optional hardware prefix) |
 
 Pointers: `flux.gcp.pkrvars.hcl`, `02-gcp-credentials.sh`
 
-Speaker note: 90 seconds, only GCP slide in the main flow. Bust the common misconception that GCP pulls from a separate Artifact Registry — it doesn't, both clouds pull from the same AWS ECR.
+Speaker note: 90 seconds, only GCP slide in the main flow. Auth chain in full: GCE metadata JWT → STS `assume-role-with-web-identity` → temporary credentials. Bust the common misconception that GCP pulls from a separate Artifact Registry — it doesn't, both clouds pull from the same AWS ECR.
 
 ---
 
-## Slide 6 — Two workflows, both gated on `workflow_dispatch`
+## Slide 6 — Two workflows, one per layer, both gated on `workflow_dispatch`
 
 |  | `packer-base-image.yml` | `packer-app-image.yml` |
 |---|---|---|
 | **Matrix** | 4-job (cloud × driver variant) | dynamic, from `services.yml` |
-| **Auth** | OIDC | OIDC |
+| **CI auth** | OIDC | OIDC |
 | **Trigger** | `workflow_dispatch` | `workflow_dispatch` (`services` input) |
 
 Speaker note: Nothing runs on merge — pre-empt "why no auto-build on PR merge?" with the blast-radius / cost answer. Say out loud: matrix is data, not workflow YAML you hand-edit — sets up `services.yml` on slide 11.
 
 ---
 
-## Slide 7 — Smoke test gates publish, per service
+## Slide 7 — Smoke test fails the build, not the fleet
 
 ```hcl
 # <service>.pkrvars.hcl
@@ -127,22 +127,22 @@ Speaker note: The value: fail at smoke (one instance) instead of at instance ref
 **Dispatch**
 5. `gh workflow run packer-app-image.yml -f services=<service>`
 
-Speaker note: Everything else is convention — emphasize that point. This is the slide a peer screenshots before opening their PR. The next six slides walk this checklist using `flux` as the worked example; reset the room before diving in.
+Speaker note: Everything else is convention — emphasize that point. This is the slide a peer screenshots before opening their PR. The next six slides walk this checklist by dependency, not in list order, using `flux` as the worked example; reset the room before diving in.
 
 ---
 
-## Slide 9 — `<service>.pkrvars.hcl` — your contract: identity, sizing, base-AMI
+## Slide 9 — [1] `<service>.pkrvars.hcl` declares identity, sizing, and images — no template edits
 
 ```hcl
-# deployment/packer/app/flux.pkrvars.hcl (annotated)
-service_name          = "flux"                                  # identity
-disk_size_gb          = 165                                     # sizing
-aws_instance_type     = "g6e.xlarge"                            # sizing (AWS)
-gcp_machine_type      = "g4-standard-48"                        # sizing (GCP)
-nvidia_driver_variant = "nvidia-driver-580"                     # picks the base AMI
+# deployment/packer/app/flux.pkrvars.hcl
+service_name          = "flux"
+disk_size_gb          = 165
+aws_instance_type     = "g6e.xlarge"
+gcp_machine_type      = "g4-standard-48"
+nvidia_driver_variant = "nvidia-driver-580"   # picks the base AMI
 docker_compose_path   = "ServerSetup/Flux/docker-compose.yml"
 docker_image_tags = {
-  image_tag = "v1.26.1"   # ↔ ${image_tag} in docker-compose.yml (slide 12)
+  image_tag = "v1.26.1"   # ↔ ${image_tag} in compose (slide 12)
 }
 ```
 
@@ -157,15 +157,15 @@ Speaker note: Walk top to bottom. Pause on `docker_image_tags` — that's where 
 | each key of `docker_image_tags` | → | same-named `${...}` in compose *(slide 12)* |
 | `service_samples_paths.dest` | → | `smoke_test_entrypoint` path prefix *(slide 7)* |
 | `services.yml` `region` | → | `<region>.pkrvars.hcl` must exist *(slide 11)* |
-| `nvidia_driver_variant` | → | base AMI name `ami-base-ubuntu2204-<v>` *(slide 4)* |
+| `nvidia_driver_variant` | → | base AMI name `ami-base-ubuntu2204-<driver-variant>-<version>` *(slide 4)* |
 
-> Build succeeds, AMI publishes, fleet boots — wrong image.
+> Build succeeds — wrong image.
 
-Speaker note: This is the #1 reviewer catch and the slide reviewers will quiz on. Each row is a real failure mode we've seen; the slide numbers in italics point to where each cross-reference is defined.
+Speaker note: This is the #1 reviewer catch and the slide reviewers will quiz on. Each row is a real failure mode we've seen.
 
 ---
 
-## Slide 11 — `services.yml` entry — cloud × region per build drives the matrix
+## Slide 11 — [4] `services.yml` entry — cloud × region per build drives the matrix
 
 ```yaml
 services:
@@ -182,7 +182,7 @@ Speaker note: Inline YAML comments carry the semantics — let the audience read
 
 ---
 
-## Slide 12 — `docker-compose.yml` owns runtime; Packer renders `${...}` bindings
+## Slide 12 — [2] `docker-compose.yml` owns runtime; Packer renders `${...}` bindings
 
 ```yaml
 # ServerSetup/Flux/docker-compose.yml (excerpt)
@@ -197,7 +197,7 @@ Speaker note: Packer renders a `/tmp/.env` at bake time with both bindings; `doc
 
 ---
 
-## Slide 13 — AWS-only = one file; multi-cloud adds an overlay, never a fork
+## Slide 13 — [3] AWS-only = one file; multi-cloud adds an overlay, never a fork
 
 ```
 flux.pkrvars.hcl                  (base — required)
@@ -213,7 +213,7 @@ Speaker note: GCP overlay is typically 5–10 lines — point this out so the cr
 
 ---
 
-## Slide 14 — Dispatch with `gh workflow run`; downstream rotation is Ops
+## Slide 14 — [5] Dispatch with `gh workflow run`; instance refresh / MIG update is Ops
 
 ```
 $ gh workflow run packer-app-image.yml -f services=flux
@@ -223,14 +223,16 @@ $ gh workflow run packer-app-image.yml -f services=flux
         │
         ▼  (separate pipeline, owned by Ops)
 ┌──────────────────────────────────────────────────────┐
-│ AWS: infra-aws-computing-provision-{beta,prod}.yml   │
-│ GCP: infra-gcp-computing-provision-{beta,prod}.yml   │
+│ AWS: ASG instance refresh                            │
+│      infra-aws-computing-provision-{beta,prod}.yml   │
+│ GCP: MIG rolling update                              │
+│      infra-gcp-computing-provision-{beta,prod}.yml   │
 └──────────────────────────────────────────────────────┘
 ```
 
 > Your responsibility ends at *AMI published*.
 
-Speaker note: Rotation onto the new AMI happens inside the provision workflows above (ASG/MIG-managed); the exact rollout cadence is an Ops concern — point people at `#infra-ops` rather than explaining it here.
+Speaker note: Instance refresh (AWS) / MIG rolling update (GCP) onto the new AMI happens inside the provision workflows above; the exact rollout cadence is an Ops concern — point people at `#infra-ops` rather than explaining it here.
 
 ---
 
@@ -244,7 +246,7 @@ Speaker note: Rotation onto the new AMI happens inside the provision workflows a
 | 4. `services.yml` entry | |
 | 5. `gh workflow run` | |
 
-Speaker note: The title-only readthrough of slides 8–14 *is* the take-home — say so on the close. Pause for Q&A. Pull appendix slides only if asked. Expect questions on rollback and how runtime updates differ from AMI rebuilds.
+Speaker note: The title-only readthrough of slides 8–14 — the checklist plus its worked example — *is* the take-home; say so on the close. Pause for Q&A. Pull appendix slides only if asked. Expect questions on rollback and how runtime updates differ from AMI rebuilds.
 
 ---
 
