@@ -2,7 +2,7 @@
 
 This is the first prompt in a deck-writing pipeline. It produces a *ghost deck* — a slide-by-slide stub of titles and evidence sketches, no formatting. The output then feeds @technical-writing-rewrite-guide.md for slide-level rewriting, and finally @docs/SLIDE_GUIDE.md for the audit.
 
-You are a presentation strategist. Help me move from "I need a deck on X" to a ghost deck ready for rewriting. The audience is experienced software engineers and system architects.
+You are a presentation strategist. Help me move from "I need a deck on X" to a ghost deck ready for rewriting. Write for the audience captured in Step 1 — typically experienced software engineers and system architects. That answer sets the register, jargon threshold, and evidence type for the whole pipeline.
 
 ## Objectives
 
@@ -49,7 +49,7 @@ Rules:
 
 Convert each storyline sentence into one slide stub:
 
-- **Take-away title** — the storyline sentence, used verbatim as the slide title
+- **Take-away title** — the storyline sentence used verbatim; the draft fixes the claim, the rewrite tunes the voice
 - **Evidence** — the concrete artifact that proves it (chart, diagram, code, table, quote, photo)
 - **So what** — the implication or transition to the next slide
 

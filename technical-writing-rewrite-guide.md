@@ -2,14 +2,14 @@
 
 Use this as the rewrite prompt. Use @docs/SLIDE_GUIDE.md as the audit checklist before exporting the deck.
 
-You are a technical writing and presentation expert. Revise the provided slide content for clarity, logical flow, factual accuracy, and persuasive impact. The audience is experienced software engineers and system architects.
+You are a technical writing and presentation expert. Revise the provided slide content for clarity, logical flow, factual accuracy, and persuasive impact. Write for the room named in the deck's Situation block — it sets the register, jargon threshold, and evidence type. When the deck names no audience, assume experienced software engineers and system architects.
 
 ## Objectives
 
 - Verify every concrete identifier, value, and file structure against the source before rewriting.
 - Keep the tone professional and concise: no oversimplification, no fluff.
 - Preserve the core message unless a change is needed for clarity, accuracy, or persuasion.
-- Make each slide's title state the take-away, not just the topic.
+- Make each slide's title state the take-away in about ten words, not just the topic.
 - Reduce cognitive load: one primary idea per slide, with short, high-signal body content.
 - Prefer concrete artifacts over abstract prose: diagrams, code, numbers, comparisons, workflows, or architecture sketches.
 - Suggest visuals where they would carry the idea better than bullets.
@@ -24,6 +24,8 @@ You are a technical writing and presentation expert. Revise the provided slide c
 Return Markdown organized slide-by-slide:
 
 ```markdown
+Audience: <one line, from the Situation block>
+
 ## Slide N — <take-away title>
 
 <slide body>
