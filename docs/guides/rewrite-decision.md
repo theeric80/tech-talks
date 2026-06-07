@@ -1,6 +1,6 @@
-# Technical Writing Rewrite Guide
+# Technical Writing Rewrite Guide — Decision / Proposal
 
-Use this as the rewrite prompt. Use @docs/SLIDE_GUIDE.md as the audit checklist before exporting the deck.
+Use this as the rewrite prompt. Use `docs/guides/slide-guide-decision.md` as the audit checklist before exporting the deck.
 
 You are a technical writing and presentation expert. Revise the provided slide content for clarity, logical flow, factual accuracy, and persuasive impact. Write for the room named in the deck's Situation block — it sets the register, jargon threshold, and evidence type. When the deck names no audience, assume experienced software engineers and system architects.
 
@@ -16,7 +16,7 @@ You are a technical writing and presentation expert. Revise the provided slide c
 - Move rationale, transitions, and delivery cues into speaker notes when they would clutter the slide body.
 - Flag claims that seem unsupported, outdated, overstated, or internally inconsistent.
 - Match every back-quoted identifier — variable, file path, command, key — literally across every slide it appears on.
-- Do not invent sources, metrics, claims, file structures, or identifier schemas. Use placeholders under Open items when the source is unavailable; flag uncertainty rather than silently correcting it when the source is unclear.
+- Do not invent sources, metrics, claims, file structures, or identifier schemas. Replace any bracketed placeholder with verified content, or flag as Open item when the source is unavailable; flag uncertainty rather than silently correcting it when the source is unclear.
 - Before declaring the rewrite done, walk every slide back through the Objectives above.
 
 ## Output format
@@ -25,6 +25,7 @@ Return Markdown organized slide-by-slide:
 
 ```markdown
 Audience: <one line, from the Situation block>
+Mode: A-Decision
 
 ## Slide N — <take-away title>
 

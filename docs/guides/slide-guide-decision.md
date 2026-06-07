@@ -1,6 +1,8 @@
-# Slide Guide
+# Slide Guide — Decision / Proposal
 
-Use this as the audit checklist. Use `technical-writing-rewrite-guide.md` as the rewrite prompt.
+Mode: A — Decision / Proposal
+
+Use this as the audit checklist. Use `docs/guides/rewrite-decision.md` as the rewrite prompt.
 
 A slide has three roles, each carrying its own load:
 
@@ -37,7 +39,7 @@ The deck's `Audience:` header names the room; rules 5 and 12 judge against it. W
    Trend → line; ranking → bar; composition → stacked; correlation → scatter. If the slide names no chart type, skip this check — do not infer one.
 
 8. **Cut anything the visual already says; in a live talk, also cut what the speaker will say out loud.**
-   Duplicated signal is noise. Rationale belongs in the speaker note, not the body.
+   Duplicated signal is noise. Rationale belongs in the speaker note, not the body. Exception: keep unfamiliar or technical terms on the slide even when spoken — for new vocabulary and non-native-language audiences, that redundancy aids comprehension (Mayer's redundancy boundary condition).
 
 9. **Readable from the back row.**
    Large text. WCAG AA contrast requires at least 4.5:1 for normal text and 3:1 for large text. Do not rely on colour alone — red-green colour blindness can affect up to about 8% of men, varying by population.
@@ -58,4 +60,4 @@ Draft → fact-check → audit against the rules above → ship.
 
 ## Sources
 
-Knaflic, *Storytelling with Data* (action title, horizontal logic); Alley, *The Craft of Scientific Presentations* (assertion-evidence: one-to-two-line sentence headline, 8–14 words); Reynolds, *Presentation Zen* (one idea, show-don't-tell, signal-to-noise); Duarte, *slide:ology* (glance test, readability); Zelazny, *Say It With Charts* (message-driven chart choice); Mayer, multimedia-learning principles (spatial contiguity, redundancy); Tufte, *Envisioning Information* (visual consistency, data-ink); WCAG 2.1 (SC 1.4.1 use of colour; SC 1.4.3 contrast); WebAIM contrast guidance.
+Knaflic, *Storytelling with Data* (action title, horizontal logic); Alley, *The Craft of Scientific Presentations* (assertion-evidence: one-to-two-line sentence headline); Reynolds, *Presentation Zen* (one idea, show-don't-tell, signal-to-noise); Duarte, *slide:ology* (glance test, readability); Zelazny, *Say It With Charts* (message-driven chart choice); Mayer, multimedia-learning principles (spatial contiguity, redundancy and its boundary conditions); Tufte, *The Visual Display of Quantitative Information* (data-ink) and *Envisioning Information* (visual consistency); WCAG 2.1 (SC 1.4.1 use of colour; SC 1.4.3 contrast); WebAIM contrast guidance.

@@ -1,6 +1,8 @@
-# Technical Writing Draft Guide
+# Technical Writing Draft Guide — Decision / Proposal
 
-This is the first prompt in a deck-writing pipeline. It produces a *ghost deck* — a slide-by-slide stub of titles and evidence sketches, no formatting. The output then feeds @technical-writing-rewrite-guide.md for slide-level rewriting, and finally @docs/SLIDE_GUIDE.md for the audit.
+This is the first prompt in a deck-writing pipeline. It produces a *ghost deck* — a slide-by-slide stub of titles and evidence sketches, no formatting. The output then feeds `docs/guides/rewrite-decision.md` for slide-level rewriting, and finally `docs/guides/slide-guide-decision.md` for the audit.
+
+This guide handles decision, alignment, proposal, and incident review decks only. For knowledge-transfer talks use `draft-transfer.md`; for status reports use `draft-status.md`.
 
 You are a presentation strategist. Help me move from "I need a deck on X" to a ghost deck ready for rewriting. Write for the audience captured in Step 1 — typically experienced software engineers and system architects. That answer sets the register, jargon threshold, and evidence type for the whole pipeline.
 
@@ -10,13 +12,14 @@ You are a presentation strategist. Help me move from "I need a deck on X" to a g
 - Force the take-away into every title; no topic labels.
 - Keep the deck MECE: each branch mutually exclusive, collectively exhaustive.
 - Default to top-down communication (BLUF / Pyramid Principle): conclusion first, evidence second.
+- Do not invent metric values, identifiers, or source claims. If the source does not supply them, use a bracketed placeholder: `[value]`. Flag all placeholders in the ghost deck.
 - Flag missing inputs rather than inventing them.
 
 ## Step 1 — Frame the situation
 
 Before drafting anything, force answers to:
 
-- **Purpose** — decision, alignment, proposal, status, incident review, or knowledge transfer
+- **Purpose** — decision, alignment, proposal, or incident review. If the purpose is knowledge transfer or status report, stop and redirect to the correct guide.
 - **Audience** — seniority, prior knowledge, what they care about, what they will decide
 - **Context** — time slot, format (live / async / read-ahead), Q&A, follow-up artifacts
 - **Success criteria** — one sentence describing what the audience does, says, or decides after
@@ -66,6 +69,7 @@ Emit only the artifacts below. No preamble, no closing commentary.
 
 ```markdown
 # Situation
+Mode: A-Decision
 Purpose: ...
 Audience: ...
 Context: ...
@@ -93,6 +97,7 @@ Expected output:
 
 ~~~markdown
 # Situation
+Mode: A-Decision
 Purpose: Decision — approve migration plan
 Audience: Platform leads + on-call engineers; senior; familiar with our Postgres setup
 Context: 15-min live + 10-min Q&A; no read-ahead
@@ -132,6 +137,5 @@ Sources (reference, not part of the prompt):
 - Garr Reynolds, *Presentation Zen* — one idea per slide, signal over noise
 - Chip & Dan Heath, *Made to Stick* — concrete claims over abstractions
 - Simon Sinek, *Start with Why* — Golden Circle
-- US Army FM 6-0 — BLUF (Bottom Line Up Front)
+- US Army AR 25-50, *Preparing and Managing Correspondence* — BLUF (Bottom Line Up Front)
 -->
-
