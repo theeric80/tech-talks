@@ -32,7 +32,7 @@ The last content slide answers the Slide 1 promise: it restates the Success crit
 `"Thank you! Questions?"` ✗
 
 1. **Apply the two-case title rule.**
-   A slide is a **claim slide** if its title asserts a measurable or falsifiable outcome — take-away title required. A slide that introduces a concept, section, or navigation step is a **concept/navigation slide** — descriptive title acceptable.
+   A slide is a **claim slide** if its title asserts a measurable or falsifiable outcome — take-away title required. A slide that introduces a concept, section, or navigation step is a **concept/navigation slide** — descriptive title acceptable. Either way, cap the title at about 12 words and at most two lines.
    - Wrong: `"Batching architecture"` ✗ (vague label, no outcome)
    - Right (claim): `"Batching cuts p99 write latency by 40%"` ✓
    - Right (concept): `"How batching works"` ✓
@@ -44,7 +44,7 @@ The last content slide answers the Slide 1 promise: it restates the Success crit
    If it can be split, split it. Save previews and transitions for agenda or bridge slides.
 
 4. **Body favors code blocks and diffs over abstract bullets.**
-   Show: working code, before/after diff, command output, diagram. Keep prose only when it is the sharpest evidence. Charts are secondary to executable artifacts.
+   Show: working code, before/after diff, command output, diagram. Keep prose only when it is the sharpest evidence. Charts are secondary to executable artifacts. Point at each body element and ask "so what?" — cut anything that does not connect to the title.
 
 5. **Anchor claims in evidence the room trusts.**
    For a peer engineering audience: working code, before/after diff, or reproduction steps. A claim without a runnable or reproducible artifact is weak.

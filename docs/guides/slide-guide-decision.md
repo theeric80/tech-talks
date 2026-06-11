@@ -17,7 +17,7 @@ Each rule = **one imperative, one rationale, one example when needed**. If a rul
 The deck's `Audience:` header names the room; rules 5 and 12 judge against it. With no header, assume experienced software engineers and system architects.
 
 1. **Title states the take-away in one short line, not a label.**
-   Past about ten words a title stops being glanceable.
+   Cap it at about 12 words and at most two lines — past that a title stops being glanceable.
    `Today: humans gate the routine` ✓  `Current flow` ✗
 
 2. **Titles alone tell the story.**
@@ -27,7 +27,7 @@ The deck's `Audience:` header names the room; rules 5 and 12 judge against it. W
    If it can be split, split it. Save previews and transitions for agenda or bridge slides.
 
 4. **Body favors concrete artifacts over abstract bullets.**
-   Show: image, code, diagram, number, comparison, workflow. Keep prose only when it is the sharpest evidence.
+   Show: image, code, diagram, number, comparison, workflow. Keep prose only when it is the sharpest evidence. Point at each body element and ask "so what?" — cut anything that does not connect to the title.
 
 5. **Anchor claims in evidence the room trusts.**
    Different rooms trust different proof — engineers weigh metrics, code paths, and trade-offs; a management or security review weighs rules, counts, owners, verification results, and their sources.

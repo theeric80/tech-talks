@@ -17,7 +17,7 @@ Each rule = **one imperative, one rationale, one example when needed**. If a rul
 The deck's `Audience:` header names the room; rules 5 and 12 judge against it. With no header, assume engineering managers and cross-functional stakeholders.
 
 1. **Title must lead with a metric or RAG signal.**
-   The audience reads the verdict from the title alone before opening the slide.
+   The audience reads the verdict from the title alone before opening the slide. Cap it at about 12 words and at most two lines.
    `"🟡 Inference latency −40 %; on track for Q3"` ✓  `"Model performance update"` ✗
 
 2. **Titles alone tell the story.**
@@ -27,7 +27,7 @@ The deck's `Audience:` header names the room; rules 5 and 12 judge against it. W
    If it can be split, split it. Save previews and transitions for agenda or bridge slides.
 
 4. **Body favors concrete artifacts over abstract bullets.**
-   Show: metric trend chart, RAG summary table, owner/due-date table, timeline. Keep prose only when it is the sharpest evidence.
+   Show: metric trend chart, RAG summary table, owner/due-date table, timeline. Keep prose only when it is the sharpest evidence. Point at each body element and ask "so what?" — cut anything that does not connect to the title.
 
 5. **Anchor claims in evidence the room trusts.**
    For a management audience: RAG status, metric trend with baseline comparison, owner name, and due date. Every action item must have an owner and a due date — flag any that lack either. Bad news must be surfaced, not buried.
