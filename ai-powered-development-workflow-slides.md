@@ -1,141 +1,104 @@
-# AI-Powered Development Workflow Proposal
+# AI-Powered Development Workflow — Proposal
 
-## Executive Summary
-
-Mandatory AI integration into the development workflow to boost code quality and efficiency. The enhanced process preserves existing CI/CD while requiring AI-assisted code review and test generation.
-
-
-**Key Changes:**
-- Required AI review for all pull requests
-- Mandatory test case commits with all code changes
-- Enhanced whitebox testing with AI-generated test cases
-
-**Expected Outcomes:**
-- Reduced manual review effort through AI-assisted analysis
-- Improved test coverage and bug detection
-- Faster development cycles with automated test generation
-
-**Implementation Risk:** Low - builds on existing development processes with incremental AI enhancements.
+Audience: Engineering VP + RD teams (read-ahead / leave-behind; no live presenter). Source: ai-powered-development-workflow.md.
 
 ---
 
-## Proposed Development Workflow
+## Slide 1 — Executive summary
+
+| | |
+|---|---|
+| **Question** | With AI's help, what can RD do to raise product quality? |
+| **Today** | Quality relies on manual review and late-stage QA — no consistent quality gate at the RD stage. |
+| **Proposal** | Put **AI to work at two points** — **AI code review** and **AI-generated test cases** — both mandatory at PR; enforced by a **>30%** new-code coverage gate. |
+| **Expected outcomes** | Higher product quality — fewer defects reach production<br>Lower fix cost — bugs caught early, not in late QA / production<br>Freed engineering capacity — less time on routine review and test-writing |
+| **Next steps** | Pilot on `rd-cc-myedit-aol-svr-api`, then metric-gated rollout to engineering teams. |
+
+---
+
+## Slide 2 — Proposed workflow
 
 ```mermaid
 flowchart LR
     A[Development<br/>Code + Tests] --> B[Pull Request<br/>Human + AI Review]
     B --> C[Review Decision<br/>Manual + CI Validation]
     C --> D[Merge<br/>Always Releasable]
-    
+
     style A fill:#e3f2fd
     style B fill:#fff3e0
     style C fill:#f3e5f5
     style D fill:#e8f5e8
 ```
 
-### Design Rationale
-* **Always Releasable:** All code changes validated before merge. Main branch remains stable for releases.
-* **Shift-Left Testing:** Early bug detection reduces fix costs and prevents bugs from reaching users.
+**Changes from current process**
 
-### 1. Development Phase
-- Engineer creates feature branch
-- **Mandatory:** Commit code with corresponding test cases
-
-### 2. Pull Request Phase
-- Engineer creates PR and requests reviewer
-- **Mandatory:** AI review alongside human reviewer
-- PR validation includes:
-
-#### Manual Review
-- Code quality assessment
-- Test case completeness verification
-- Test case correctness validation
-
-#### CI Validation (Automated)
-- Build execution
-- SonarQube static analysis
-- Whitebox test execution
-- **New:** Code coverage validation (>30% threshold for new code only)
-
-### 3. Review Decision
-- Reviewer evaluates combined results:
-  - Human code review findings
-  - AI review recommendations
-  - CI validation results
-- Approval decision based on all criteria
-
-### 4. Merge
-- Approved PRs merged to target branch
-- All quality gates must pass
-
-### Key Workflow Changes
 | Component | Current | Proposed |
 |-----------|---------|----------|
-| Test Cases | Optional | **Mandatory** |
-| AI Review | Optional | **Mandatory** |
-| Whitebox Testing | Regression focus | **New changes + regression** |
-| Code Coverage | No enforcement | **>30% threshold for new code** |
+| Test cases | Optional | **Mandatory** |
+| AI review | Optional | **Mandatory** |
+| Code coverage | No enforcement | **>30%, new code only** |
+
+*Per-phase steps and the Manual-vs-CI breakdown: Appendix A.*
 
 ---
 
-## AI Enhancement Details
+## Slide 3 — AI enhancements
 
-### AI-Assisted Code Review
-- Code change summarization and improvement recommendations
-- Reduces manual review time and improves consistency
-- Catches common issues early
-
-### AI-Assisted Test Generation
-- Comprehensive test case generation for happy path and edge cases
-- Increases test coverage while reducing manual effort
-- Accelerates development velocity
+| Area | What AI does | Benefit |
+|------|--------------|---------|
+| **Code review** | Summarizes changes, highlights major modifications, recommends improvements | Less manual review effort; more consistent reviews |
+| **Test generation** | Generates tests for new code — happy path and edge/error cases | Higher coverage; less manual effort writing tests |
 
 ---
 
-## Technical Implementation
+## Slide 4 — CI gates run in parallel
 
-### Quality Assurance Strategy
-- **SonarQube remains primary CI gate:** Rule-based analysis for coding standards and anti-pattern detection
-- **AI supplements, not replaces:** AI tools enhance existing processes without disrupting proven quality mechanisms
-- **Incremental adoption:** Build on established development workflows
-
-### Whitebox Testing Clean as You Code Implementation
-- **New code definition:** Focus testing on code changes since previous version
-- **Testing strategy:** AI-generated tests target new code changes with comprehensive coverage
-- **Progressive quality improvement:** Each PR incrementally improves overall test coverage and quality
-- **Efficient resource allocation:** Concentrate testing effort on recent changes rather than entire codebase
+| Gate | Type | Status |
+|------|------|--------|
+| SonarQube | Rule-based static analysis | Existing |
+| AI review | Semantic, context-aware | New |
+| Coverage | >30% on new code | New |
 
 ---
 
-## Success Metrics
+## Slide 5 — Next steps
 
-### Quality Metrics
-- Code coverage percentage increase
-- Bug detection rate improvement
-- Review cycle time reduction
+| Phase | Scope | Gate |
+|-------|-------|------|
+| **Pilot** | `rd-cc-myedit-aol-svr-api` | Workflow runs; >30% new-code coverage enforced |
+| **Rollout** | Engineering teams `[scope & timing — after pilot]` | Metric-gated, staged |
 
-### Efficiency Metrics
-- Time to merge reduction
-- Test case generation speed
-- Developer productivity increase
-
-### Adoption Metrics
-- AI review utilization rate
-- Developer satisfaction scores
-- Process compliance rates
+*Dependency: target code must be unit-testable; some services may need refactoring first — scoped separately.*
 
 ---
 
-## Conclusion
+## Appendix A — Workflow detail
 
-AI-powered development workflow implements shift-left testing principles to ensure early bug detection and maintain an always-releasable main branch. Combining mandatory AI assistance with Clean as You Code whitebox testing achieves progressive quality improvement while focusing resources on new code changes.
+### 1. Development
+- Engineer creates a feature branch
+- **Mandatory:** commit code with corresponding test cases
 
-**Key Benefits:**
-- **Shift-left approach:** Early validation reduces fix costs and prevents user-facing bugs
-- **Always releasable:** Pre-merge validation ensures release readiness  
-- **Efficient testing:** Clean as You Code focuses effort on new changes, not legacy code
-- **AI acceleration:** Automated test generation and code review reduce manual overhead
+### 2. Pull request
+- Engineer creates a PR, requests a reviewer and AI review
 
-Incremental enhancement of existing processes minimizes adoption risk while delivering measurable improvements in code quality, development velocity, and engineering efficiency.
+| Manual review | CI validation (automated) |
+|---------------|---------------------------|
+| Code quality | Build execution |
+| Test-case completeness | SonarQube analysis |
+| Test-case correctness | Whitebox test execution |
+| | Coverage check (>30%, new code) |
 
-**Recommendation:** Approve pilot implementation, followed by measured rollout to engineering teams based on success metrics.
+### 3. Review decision
+- Reviewer evaluates human findings + AI recommendations + CI results → approve or reject
+
+### 4. Merge
+- Approved PRs merge to the target branch; all gates must pass
+
+---
+
+## Appendix B — Design rationale
+
+| Principle | Effect |
+|-----------|--------|
+| **Always releasable** | All changes validated before merge; main stays stable for release |
+| **Shift-left** | Catch bugs at the RD stage — earlier detection means cheaper fixes |
